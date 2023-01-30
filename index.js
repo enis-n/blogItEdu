@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 // modules
 const express = require("express");
 const mongoose = require("mongoose");
@@ -11,7 +13,9 @@ const blogRouter = require("./routers/blogRouter");
 const auth = require("./helpers/auth");
 
 const app = express();
-app.listen(80);
+app.listen(process.env.PORT, () => {
+  console.log("Server Started");
+});
 
 //set view engine to ejs
 app.set("view engine", "ejs");
@@ -25,10 +29,10 @@ app.use(
   })
 );
 
-let db =
-  "mongodb+srv://adminitedu:Laptop123@cluster0.inlvu3p.mongodb.net/blog01";
-
-mongoose.connect(db);
+mongoose.set("strictQuery", false);
+mongoose.connect(
+  `mongodb+srv://adminitedu:${process.env.DB_PASS}@cluster0.inlvu3p.mongodb.net/blog01`
+);
 
 // setting /static as a public path
 app.use("/static", express.static("static"));
